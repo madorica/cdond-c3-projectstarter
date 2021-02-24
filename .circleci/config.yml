@@ -63,9 +63,9 @@ jobs:
           command: |
              cd backend
              npm install typescript
-             cat src/main.ts
+             sed -n '31s/x//gp' src/main.ts
              npm run build
-
+             
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
