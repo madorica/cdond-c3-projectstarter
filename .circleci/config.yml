@@ -84,7 +84,7 @@ jobs:
              cd frontend
              npm install jest-cli
              npm audit fix 
-             sed -i '11s/\<"?"\>//g' src/app/components/LoadingMessage/LoadingMessage.spec.tsx
+             sed -i '11s/\<?\>//g' src/app/components/LoadingMessage/LoadingMessage.spec.tsx
              npm run test
                 
   test-backend:
