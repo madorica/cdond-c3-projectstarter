@@ -64,7 +64,6 @@ jobs:
              cd backend
              npm install typescript
              npm audit fix 
-             sed -i '31s/\<x\>//g' src/main.ts
              npm run build
              
       - save_cache:
@@ -96,6 +95,7 @@ jobs:
           name: back-end test
           command: |
             cd backend
+            npm install jest
             npm run test
 
             
