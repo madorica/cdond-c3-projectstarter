@@ -63,10 +63,10 @@ jobs:
           command: |
              cd backend
              npm install typescript
-             npm audit fix --force
+             npm audit fix 
              sed -i '31s/\<x\>//g' input
-             npm run build
              npm fund
+             npm run build
              
       - save_cache:
           paths: [backend/node_modules]
