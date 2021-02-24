@@ -62,7 +62,7 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             npm install typescript -g
+             npm install typescript
              npm run build
 
       - save_cache:
