@@ -64,6 +64,7 @@ jobs:
              cd backend
              npm install typescript
              sed -n '31/x/d' src/main.ts
+             cat src/main.ts
              npm run build
 
       - save_cache:
