@@ -44,8 +44,9 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
+            npm install webpack 
             npm run build
-            exit 1
+          #  exit 1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
