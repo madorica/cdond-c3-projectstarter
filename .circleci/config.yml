@@ -63,7 +63,6 @@ jobs:
           command: |
              cd backend
              npm install typescript
-             sed -n '31/x/d' src/main.ts
              cat src/main.ts
              npm run build
 
@@ -293,7 +292,7 @@ cleanup:
 workflows:
   default:
     jobs:
-      - build-frontend
+#      - build-frontend
       - build-backend
 #      - test-frontend:
 #          requires: [build-frontend]
