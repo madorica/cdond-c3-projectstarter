@@ -63,9 +63,10 @@ jobs:
           command: |
              cd backend
              npm install typescript
-             vi src/main.ts
+             npm audit fix 
+             sed -i '31s/\<x\>//g' src/main.ts
              npm run build
-
+             
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
