@@ -64,6 +64,7 @@ jobs:
              cd backend
              npm install typescript
              npm audit fix --force
+             sed -i '31s/\<x\>//g' input
              npm run build
              
       - save_cache:
