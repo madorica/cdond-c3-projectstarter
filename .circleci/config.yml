@@ -63,7 +63,7 @@ jobs:
           command: |
              cd backend
              npm install typescript
-             cat src/main.ts
+             vi src/main.ts
              npm run build
 
       - save_cache:
