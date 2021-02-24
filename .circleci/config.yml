@@ -83,6 +83,7 @@ jobs:
           command: |
              cd frontend
              npm install jest-cli
+             sed -i '11s/\<?\>//g' src/app/components/LoadingMessage/LoadingMessage.spec.tsx
              npm run test
                 
   test-backend:
