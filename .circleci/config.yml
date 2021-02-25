@@ -151,16 +151,16 @@ jobs:
           command: |
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:Project,Values=frontend-udapeople" \
+            --filters "Name=tag:Project,Values=backend-udapeople" \
             --output text >> .circleci/ansible/inventory.txt
       - run:
           name: Dependancies
           command: |
             yum -y install tar gzip jq npm
       - persist_to_workspace:
-          root: ~/
+          root: .circleci/ansible
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - inventory.txt
     #  - revert-migrations
     #  - destroy-environment # Rollback on failure 
   configure-infrastructure:
