@@ -109,7 +109,7 @@ jobs:
       - run:
           name: scan front-end
           command: |
-            cd fontend
+            cd frontend
             npm audit fix --audit-level=critical --force
 
   scan-backend:
