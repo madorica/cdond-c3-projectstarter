@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  node: 'circleci/node:4.1'
-  slack: circleci/slack@4.1
+   node: circleci/node@4.2.0
+   slack: circleci/slack@4.1
 
 commands:
   destroy-environment:
@@ -97,7 +97,7 @@ jobs:
           name: front-end test
           command: |
              cd frontend
-             npm install jest
+
              npm run test
                 
   test-backend:
