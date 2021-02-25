@@ -154,6 +154,10 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Project,Values=frontend-udapeople" \
             --output text >> .circleci/ansible/inventory.txt
+      - run:
+          name: Dependancies
+          command: |
+            yum -y install tar gzip jq npm
       - persist_to_workspace:
           root: ~/
           paths:
