@@ -203,10 +203,12 @@ jobs:
       - run:
           name: awscli install
           command: |
+            sudo chown -R $USER /usr/local/lib/node_modules
             sudo apt-get -y -qq update
             sudo apt-get -qq install awscli
             sudo apt-get -y -qq install python3
             npm install typescript -g
+            
       - run:
           name: Run database migrations
           no_output_timeout: 10m
