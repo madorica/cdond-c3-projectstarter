@@ -5,20 +5,12 @@ commands:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     steps:
       - run:
-          name: Install AWS CLI if not Exist
-          when: on_fail
-          command: |
-            if ! [ -x "$(command -v aws)" ]; then
-            pip install awscli
-            else
-            echo "AWS CLI already installed"
-            fi
-      - run:
           name: Destroy environments
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
             exit 1
 
   revert-migrations:
@@ -33,9 +25,8 @@ commands:
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
-              npm install
+              npm i
               npm run migrations:revert
-              exit 1
             fi
             
 jobs:
@@ -136,6 +127,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout 
+      - run: yum -y install tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -151,25 +143,28 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=backend-udapeople" \
               --output text) 
-
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            ip=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=backend-udapeople" \
+              --output text) 
+            
             echo "$ip" >> .circleci/ansible/inventory.txt
-            echo "$ip"
-            curl -H "Content-Type: text/plain" -H "token: IP-${CIRCLE_WORKFLOW_ID:0:9}" \
-            --request PUT \
-            --data "$ip" https://api.memstash.io/values/IP
       - run:
           name: Dependencies
           command: |
             cat .circleci/ansible/inventory.txt
             ls ~/project/.circleci/ansible/
             cat ~/project/.circleci/ansible/inventory.txt
-            yum -y install tar gzip jq npm
+            yum -y install gzip jq npm
       - persist_to_workspace:
          root: .circleci/ansible
          paths:
             - inventory.txt
       - revert-migrations
-      - destroy-environment # Rollback on failure 
+      - destroy-environment
   configure-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -209,39 +204,21 @@ jobs:
             sudo apt-get -qq install awscli
             sudo apt-get -y -qq install python3
       - run:
-          name: Run migrations
+          name: Run database migrations
+          no_output_timeout: 10m
+          command: |
+            cd backend && npm run migrations | tee migration_results.txt
+      - run:
+          name: save migrations
           command: |
             cd backend
-            npm install
-            npm run build
-            # npm audit fix --audit-level=critical --force
-            # echo "_________________ Step Ended ___________________"
-            touch migration.txt
-            npm run migrations >> migration.txt
-            cat migration.txt
-           
-      - run:
-          name: Send migration results to memstash
-          command: |
-            if grep -q "has been executed successfully." migration.txt
+            if grep "executed successfully" migration_results.txt
             then
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" \
-            --request PUT \
-            --data "1" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID}
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "true" https://api.memstash.io/values/<< pipeline.id >>_migrations
             else
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" \
-            --request PUT \
-            --data "0" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID}
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "false" https://api.memstash.io/values/<< pipeline.id >>_migrations
             fi
-      - run:
-          name: LogOnFail
-          when: on_fail
-          command: |
-            cat /home/circleci/.npm/_logs/*-debug.log
-            ls -la
-            cat backend/migration.txt
       - revert-migrations
-      - destroy-environment # Rollback on failure      
 
   deploy-frontend:
     docker:
@@ -251,58 +228,84 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            yum -y install tar gzip 
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs 
       - run:
           name: Get backend url
           command: |
-            # your code here
+            BACKEND_IP=$(curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:9}" \
+            --request GET https://api.memstash.io/values/IP)
+            echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure      
+            npm install webpack-dev-server -g
+            cd frontend
+            npm install
+            npm run build
+            aws s3 cp ./dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - revert-migrations
+      - destroy-environment # Rollback on failure
                     
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - add_ssh_keys:
+          fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
+      - attach_workspace:
+          at: /tmp/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            apk add --update ansible
+            apk add --update tar gzip curl
+            apk add --update openssh-client
       - run:
-          name: Deploy backend
+          name: Compress Backend
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure  
+            tar -C backend -czvf artifact.tar.gz .
+            ls -la
+      - run:
+          name: Deploy Backend
+          command: |
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+      - revert-migrations
+      - destroy-environment # Rollback on failure  
 
   smoke-test:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11 
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            apk add --update tar gzip curl
       - run:
-          name: Get backend url
+          name: Backend smoke test
           command: |
-            # your code here
-      - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
+            BACKEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:9}" \
+                        --request GET https://api.memstash.io/values/IP)
+            URL="http://$BACKEND_IP:3030/api/status"
+            echo $URL
+            curl $URL
       - run:
           name: Frontend smoke test.
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure  
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-eu-central-1.amazonaws.com"
+            if curl -s ${URL} | grep "Welcome"
+            then
+              return 0
+            else
+              return 1
+            fi  
+      - revert-migrations
+      - destroy-environment # Rollback on failure  
 
   cloudfront-update:
     docker:
