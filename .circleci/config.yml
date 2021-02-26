@@ -159,7 +159,7 @@ jobs:
             cat ~/project/.circleci/ansible/inventory.txt
             yum -y install tar gzip jq npm
       - persist_to_workspace:
-          root: .circleci/ansible
+          root: project
           paths:
             - inventory.txt
     #  - revert-migrations
@@ -169,8 +169,10 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - add_ssh_keys:
+          fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
+      - attach_workspace:
+          at: /tmp/project 
       - run:
           name: Install dependencies
           command: |
