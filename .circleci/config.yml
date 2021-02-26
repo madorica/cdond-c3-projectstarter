@@ -176,15 +176,12 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt update
-            apt upgrade
-            apt install nodejs
-            apt install npm
-            apt install python
-            apt install python-pip
-            apt install software-properties-common
-            apt-add-repository --yes --update ppa:ansible/ansible
-            apt install ansible
+            apk add --no-cache \
+                python \ 
+                py-pip \ 
+                nodejs \
+                npm \
+                pm2
       - run:
           name: Configure server
           command: |
