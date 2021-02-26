@@ -25,11 +25,11 @@ commands:
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail
           command: |
             SUCCESS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
             --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID})
-            echo "************** SUCCESS = $SUCCESS"
+            echo  "SUCCESS = $SUCCESS"
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -151,7 +151,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=backend-udapeople" \
               --output text) 
-            
+
             echo "$ip" >> .circleci/ansible/inventory.txt
             echo "$ip"
             curl -H "Content-Type: text/plain" -H "token: IP-${CIRCLE_WORKFLOW_ID:0:9}" \
@@ -178,7 +178,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
       - attach_workspace:
-          at: /tmp/project 
+          at: /tmp/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
