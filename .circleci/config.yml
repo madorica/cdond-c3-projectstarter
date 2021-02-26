@@ -205,7 +205,8 @@ jobs:
           command: |
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3
-            python -m pip3 install awscli
+            sudo apt install python3-pip
+            python -m pip install awscli
             npm install typescript -g
             
       - run:
