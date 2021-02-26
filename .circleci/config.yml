@@ -153,8 +153,8 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Project,Values=backend-udapeople" \
             --output text)
-            echo "$ip"
-            echo "$ip" >> .circleci/ansible/inventory.txt
+            echo $ip
+            echo $ip >> .circleci/ansible/inventory.txt
       - run:
           name: Dependancies
           command: |
