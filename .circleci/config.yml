@@ -181,7 +181,9 @@ jobs:
                 py3-pip \
                 nodejs \
                 npm \
-                pm2
+                awscli \
+            && rm -rf /var/cache/apk/*
+            apk add --update ansible
       - run:
           name: Configure server
           command: |
