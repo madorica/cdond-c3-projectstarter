@@ -177,8 +177,8 @@ jobs:
           name: Install dependencies
           command: |
             apk add --no-cache \
-                python \ 
-                py-pip \ 
+                python3 \
+                py3-pip \
                 nodejs \
                 npm \
                 pm2
