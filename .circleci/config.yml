@@ -204,7 +204,7 @@ jobs:
           name: awscli install
           command: |
             sudo apt-get -y -qq update
-            apt-get install awscli
+            python -m pip install awscli
             sudo apt-get -y -qq install python3
             npm install typescript -g
             
