@@ -203,9 +203,8 @@ jobs:
       - run:
           name: awscli install
           command: |
-            sudo chown -R $USER /usr/local/lib/node_modules
             sudo apt-get -y -qq update
-            sudo apt-get -qq install awscli
+            apt-get install awscli
             sudo apt-get -y -qq install python3
             npm install typescript -g
             
