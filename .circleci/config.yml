@@ -201,15 +201,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: awscli install
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python3
-            sudo apt install python3-pip
-            python3 -m pip3 install awscli
-            npm install typescript -g
-            
-      - run:
           name: Run database migrations
           no_output_timeout: 10m
           command: |
