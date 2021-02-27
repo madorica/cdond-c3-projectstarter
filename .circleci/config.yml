@@ -200,10 +200,15 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - run: cd backend && npm install
       - run:
           name: Run database migrations
           no_output_timeout: 10m
           command: |
+            npm set prefix ~/.npm
+            PATH="$HOME/.npm/bin:$PATH"
+            PATH="./node_modules/.bin:$PATH"
+            source ~/.bashrc
             npm install typescript -g
             cd backend && npm run migrations | tee migration_results.txt
       - run:
