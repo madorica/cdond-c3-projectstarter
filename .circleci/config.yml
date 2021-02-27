@@ -10,7 +10,6 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive --force
             aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
             exit 1
 
@@ -143,10 +142,11 @@ jobs:
       - run:
           name: Ensure front-end infrastructure exist
           command: |
-            ip=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=frontend-udapeople" \
-              --output text) 
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --tags project=frontend-udapeople \
+              --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
       - run:
           name: Add back-end ip to ansible inventory
           command: |
