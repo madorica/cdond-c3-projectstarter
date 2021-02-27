@@ -323,7 +323,26 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-            # your code here
+            export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value"\
+                                    --no-paginate --output text)
+            export STACKS=($(aws cloudformation list-stacks --query "stackSummaries[*].StackName"\
+                            --stack-status-filter CREATE_COMPELTE --no-paginate --output text))
+            echo Old Workflow Id: "${OldWorkflowID}"
+            echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name udapeople-cloudfront \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tag project=udapeople &
+            
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
+              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws cloudformation delete-stack --stackname "udapeople-backend-${OldWorkflowID}"
+              aws cloudformation delete-stack --stackname "udapeople-frontend-${OldWorkflowID}"
+            fi
+      - destroy-environment
+      - revert-migrations
       # Here's where you will add some code to rollback on failure  
 
 cleanup:
@@ -372,9 +391,9 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-#      - smoke-test:
-#          requires: [deploy-backend, deploy-frontend]
-#      - cloudfront-update:
-#          requires: [smoke-test]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [smoke-test]
 #      - cleanup:
 #          requires: [cloudfront-update]
