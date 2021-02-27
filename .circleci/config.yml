@@ -145,7 +145,7 @@ jobs:
           command: |
             ip=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=backend-udapeople" \
+              --filters "Name=tag:project,Values=frontend-udapeople" \
               --output text) 
       - run:
           name: Add back-end ip to ansible inventory
