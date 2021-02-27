@@ -295,7 +295,7 @@ jobs:
           name: Backend smoke test
           command: |
             BACKEND_IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:project, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --filters "Name=tag:project, Values=backend-udapeople" \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text)
             URL="http://${BACKEND_IP}:3030/api/status"
