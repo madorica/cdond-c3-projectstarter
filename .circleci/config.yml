@@ -189,9 +189,9 @@ jobs:
                 python3 \
                 py3-pip \
                 nodejs \
-                awscli \
                 npm \
                 pm2 \
+                awscli \
             && rm -rf /var/cache/apk/*
             apk add --update ansible
       - run:
@@ -206,7 +206,14 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: cd backend && npm install
+      - run:
+          name: dependancies
+          command: |  
+            cd backend && npm install
+            sudo apt-get -y -qq update
+            sudo apt-get -qq install awscli
+            sudo apt-get -y -qq install python3
+            npm install typescript -g
       - run:
           name: Run database migrations
           no_output_timeout: 30m
@@ -215,8 +222,9 @@ jobs:
             PATH="$HOME/.npm/bin:$PATH"
             PATH="./node_modules/.bin:$PATH"
             source ~/.bashrc
-            npm install typescript -g
-            cd backend && npm run migrations | tee migration_results.txt
+            cd backend
+            npm run build
+            npm run migrations | tee migration_results.txt
       - run:
           name: save migrations
           command: |
