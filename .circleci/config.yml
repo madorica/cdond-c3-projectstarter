@@ -135,6 +135,7 @@ jobs:
       - run: yum -y install tar gzip
       - run:
           name: Ensure back-end infrastructure exists
+          no_output_timeout: 30m
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
