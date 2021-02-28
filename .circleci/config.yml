@@ -170,6 +170,8 @@ jobs:
          root: .circleci/ansible
          paths:
             - inventory.txt
+      - revert-migrations
+      - destroy-environment # Rollback on failure
 
   configure-infrastructure:
     docker:
@@ -313,8 +315,8 @@ jobs:
             else
               return 1
             fi  
-      - revert-migrations
-      - destroy-environment # Rollback on failure  
+    #  - revert-migrations
+    #  - destroy-environment # Rollback on failure  
 
   cloudfront-update:
     docker:
