@@ -218,10 +218,6 @@ jobs:
           name: Run database migrations
           no_output_timeout: 30m
           command: |
-            npm set prefix ~/.npm
-            PATH="$HOME/.npm/bin:$PATH"
-            PATH="./node_modules/.bin:$PATH"
-            source ~/.bashrc
             npm install typescript -g
             cd backend
             npm run build
