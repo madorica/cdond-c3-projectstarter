@@ -58,8 +58,8 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             npm install typescript
              npm audit fix 
+             npm install typescript
              npm run build
              
       - save_cache:
