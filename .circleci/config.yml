@@ -189,9 +189,9 @@ jobs:
                 python3 \
                 py3-pip \
                 nodejs \
+                awscli \
                 npm \
-                pm2 \ 
-                pip install awscli \
+                pm2 \
             && rm -rf /var/cache/apk/*
             apk add --update ansible
       - run:
