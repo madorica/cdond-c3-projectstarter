@@ -295,6 +295,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update tar gzip curl
+            apk add --update curl nodejs npm
             pip install awscli
       - run:
           name: Backend smoke test
@@ -316,8 +317,8 @@ jobs:
             else
               return 1
             fi  
-    #  - revert-migrations
-    #  - destroy-environment # Rollback on failure  
+      - revert-migrations
+      - destroy-environment # Rollback on failure  
 
   cloudfront-update:
     docker:
