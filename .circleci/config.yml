@@ -191,6 +191,7 @@ jobs:
                 nodejs \
                 npm \
                 awscli \
+                pm2 \
             && rm -rf /var/cache/apk/*
             apk add --update ansible
       - run:
