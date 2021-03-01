@@ -132,7 +132,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout 
-      - run: yum -y install tar gzip
+      - run: yum -y install tar gzip curl
       - run:
           name: Ensure back-end infrastructure exists
           no_output_timeout: 30m
@@ -160,6 +160,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
+            echo "[web]" > .circleci/ansible/inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Project,Values=backend-udapeople" \
