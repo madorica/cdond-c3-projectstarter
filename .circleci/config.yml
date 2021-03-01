@@ -163,7 +163,7 @@ jobs:
             echo "[web]" > .circleci/ansible/inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Project,Values=backend-udapeople" \
+              --filters "Name=tag:project,Values=backend-udapeople" \
               --output text >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
 #      - run:
