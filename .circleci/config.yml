@@ -187,14 +187,13 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
       - attach_workspace:
-          at: /tmp/.circleci/ansible
+          at: project/.circleci/ansible/
       - run:
           name: Install dependencies
           command: |
-            apk add --no-cache \
-                nodejs \
-                npm \
-                pm2 \
+            apk add tar
+            apk add gzip
+            apk add --update ansible
             pip install awscli
             apk add --update ansible
       - run:
