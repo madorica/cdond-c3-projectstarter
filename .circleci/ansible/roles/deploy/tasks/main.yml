@@ -25,12 +25,12 @@
     production: yes
     state: present
 
--name: "create backend folder"
+- name: "create backend folder"
   file:
     path: /home/ubuntu/backend
     state: directory
 
--name: "copy backend folder"
+- name: "copy backend folder"
   copy:
     src: /root/project/backend
     dest: /home/ubuntu
