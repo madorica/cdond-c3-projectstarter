@@ -311,9 +311,10 @@ jobs:
       - run:
           name: Deploy Backend
           command: |
-            echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" --request GET https://api.memstash.io/values/backend_ip) >> .circleci/ansible/inventory
+            echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" --request GET https://api.memstash.io/values/backend_ip) >> .circleci/ansible/inventory.txt
             echo $PWD
-            ansible-playbook -i inventory deploy-backend-playbook.yml
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt deploy-backend.yml
       - revert-migrations
       - destroy-environment # Rollback on failure  
 
@@ -425,14 +426,14 @@ workflows:
               only: [madorica-patch-2-1]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-#      - run-migrations:
-#          requires: [configure-infrastructure]
-#      - deploy-frontend:
-#          requires: [run-migrations]
-#      - deploy-backend:
-#          requires: [run-migrations]
-#      - smoke-test:
-#          requires: [deploy-backend, deploy-frontend]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
 #      - cloudfront-update:
 #          requires: [smoke-test]
 #      - cleanup:
