@@ -198,7 +198,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
       - attach_workspace:
-          at: project/.circleci/ansible/
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -224,9 +224,9 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             cat backend/.env
             echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" \
-             --request GET https://api.memstash.io/values/backend_ip) >> ~/project/.circleci/ansible/inventory.txt
-            echo $PWD
-            ansible-playbook -i inventory.txt ~/project/.circleci/ansible/configure-server.yml
+             --request GET https://api.memstash.io/values/backend_ip) >>  ~/project/.circleci/ansible/inventory.txt
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
       - revert-migrations
       - destroy-environment # Rollback on failure      
 
@@ -312,7 +312,7 @@ jobs:
           name: Deploy Backend
           command: |
             echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" --request GET https://api.memstash.io/values/backend_ip) >> .circleci/ansible/inventory
-            $ echo $PWD
+            echo $PWD
             ansible-playbook -i inventory deploy-backend-playbook.yml
       - revert-migrations
       - destroy-environment # Rollback on failure  
