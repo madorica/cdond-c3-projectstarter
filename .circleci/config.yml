@@ -333,9 +333,9 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd ~/.circleci/ansible
+            cd ~/project/.circleci/ansible
             echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" \
-             --request GET https://api.memstash.io/values/backend_ip) >> ~/.circleci/ansible/inventory.txt
+             --request GET https://api.memstash.io/values/backend_ip) >> ~/project/.circleci/ansible/inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
        # Rollback on failure  
 
