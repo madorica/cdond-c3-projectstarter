@@ -62,7 +62,14 @@ jobs:
              npm audit fix 
              npm install typescript
              npm run build
-             
+      - run:
+          name: Copy compiled backend 
+          command: |
+            mkdir /tmp/workspace
+            cp ./backend/package.json /tmp/workspace/
+            cd backend/dist
+            tar -zcvf /tmp/workspace/backend.tar.gz ./
+
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -291,7 +298,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
       - attach_workspace:
-          at: ~/
+          at: /tmp/workspace
       - run:
           name: Install dependencies
           command: |
@@ -304,6 +311,7 @@ jobs:
       - run:
           name: Deploy Backend
           command: |
+            cd .circleci/ansible
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - revert-migrations
       - destroy-environment # Rollback on failure  
