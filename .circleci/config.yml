@@ -146,7 +146,6 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=backend-udapeople" \
               --output text)
-            echo $BACKEND_IP >> .circleci/ansible/inventory.txt
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT \
               --data "$BACKEND_IP" https://api.memstash.io/values/BACKEND_IP
       - run:
@@ -291,7 +290,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
       - attach_workspace:
-          at: /tmp/.circleci/ansible
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -413,14 +412,14 @@ workflows:
               only: [madorica-patch-2-1]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-#      - run-migrations:
-#          requires: [configure-infrastructure]
-#      - deploy-frontend:
-#          requires: [run-migrations]
-#      - deploy-backend:
-#          requires: [run-migrations]
-#      - smoke-test:
-#          requires: [deploy-backend, deploy-frontend]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
 #      - cloudfront-update:
 #          requires: [smoke-test]
 #      - cleanup:
