@@ -28,15 +28,15 @@
 - name: "Copy backend build to server"
   become: yes
   unarchive:
-    src: /tmp/workspace/backend.tar.gz
-    dest: /home/ubuntu/app/
+    src:  ~/project/backend.tar.gz
+    dest: /home/ubuntu/
     owner: ubuntu
 
 - name: "Copy package.json to server"
   become: yes
   copy:
     src: /tmp/workspace/package.json
-    dest: /home/ubuntu/app/
+    dest: /home/ubuntu/
     owner: ubuntu
 
 - name: "build package"
