@@ -297,8 +297,10 @@ jobs:
           command: |
             apk add --update ansible
             apk add --update tar gzip curl
+      - run:
+          name: install openssh
+          command: |
             apk add openssh-client
-
       - run:
           name: Deploy Backend
           command: |
