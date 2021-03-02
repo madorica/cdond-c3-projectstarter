@@ -225,7 +225,7 @@ jobs:
             cat backend/.env
             echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" \
              --request GET https://api.memstash.io/values/backend_ip) >> ~/project/.circleci/ansible/inventory.txt
-            $ echo $PWD
+            echo $PWD
             ansible-playbook -i inventory.txt ~/project/.circleci/ansible/configure-server.yml
       - revert-migrations
       - destroy-environment # Rollback on failure      
