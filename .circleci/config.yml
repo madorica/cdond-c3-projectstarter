@@ -194,6 +194,7 @@ jobs:
             apk add gzip
             apk add --update ansible
             pip install awscli
+            apk add openssh-client
       - run:
           name: Configure server
           command: |
@@ -297,10 +298,11 @@ jobs:
             apk add --update ansible
             apk add --update tar gzip curl
             apk add openssh-client
-             apk add --update openssh-client
+            apk add --update openssh-client
       - run:
           name: Deploy Backend
           command: |
+            cd .circleci/ansible
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - revert-migrations
       - destroy-environment # Rollback on failure  
