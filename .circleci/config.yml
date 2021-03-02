@@ -66,9 +66,9 @@ jobs:
           name: Copy compiled backend 
           command: |
             mkdir /tmp/workspace
-            cp ./backend/package.json /tmp/workspace/
+            cp -v ./backend/package.json /tmp/workspace/
             echo $PWD
-            cd /backend/dist
+            cd backend/dist
             tar -zcvf /tmp/workspace/backend.tar.gz ./
             echo $PWD
       - save_cache:
