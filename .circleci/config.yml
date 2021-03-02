@@ -327,7 +327,9 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
-            tar -C backend -czvf artifact.tar.gz .
+            tar cvzf backend.tar.gz backend
+            cd backend
+            ls -ahl
             cd .circleci/ansible
             echo $(curl -H "token: 21655ba8-a199-4ae9-8b32-0cf4daa7e3a3" \
              --request GET https://api.memstash.io/values/backend_ip) >> .circleci/ansible/inventory.txt
