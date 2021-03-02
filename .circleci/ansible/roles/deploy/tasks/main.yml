@@ -25,6 +25,15 @@
     production: yes
     state: present
 
+- name: "install typescript"
+  become: yes
+  npm:
+    name: typescript
+    global: yes
+    production: yes
+    state: present
+
+
 - name: "Copy backend build to server"
   become: yes
   unarchive:
