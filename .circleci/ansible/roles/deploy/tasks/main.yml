@@ -35,7 +35,7 @@
 - name: "Copy package.json to server"
   become: yes
   copy:
-    src: ~/project/package.json
+    src: ~/project/backend/package.json
     dest: /home/ubuntu/
     owner: ubuntu
 
