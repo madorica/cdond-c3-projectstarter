@@ -25,16 +25,20 @@
     production: yes
     state: present
 
-- name: "create backend folder"
-  file:
-    path: /home/ubuntu/backend
-    state: directory
+- name: "Copy backend build to server"
+  become: yes
+  unarchive:
+    src: /tmp/workspace/backend.tar.gz
+    dest: /home/ubuntu/app/
+    owner: ubuntu
 
-- name: "copy backend folder"
+- name: "Copy package.json to server"
+  become: yes
   copy:
-    src: /root/project/backend
-    dest: /home/ubuntu
-    
+    src: /tmp/workspace/package.json
+    dest: /home/ubuntu/app/
+    owner: ubuntu
+
 - name: "build package"
   shell: |
     cd /home/ubuntu/backend
