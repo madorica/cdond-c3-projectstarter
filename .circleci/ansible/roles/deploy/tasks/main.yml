@@ -16,7 +16,7 @@
     name: ["nodejs", "npm"]
     state: latest
     update_cache: yes
-
+    
 - name: "install pm2"
   become: yes
   npm:
@@ -24,6 +24,11 @@
     global: yes
     production: yes
     state: present
+    
+- name: "Install NPM dependencies"
+  shell:
+    cmd: npm install --production
+    chdir: /home/ubuntu/    
 
 - name: "install typescript"
   become: yes
@@ -47,25 +52,22 @@
     dest: /home/ubuntu/
     owner: ubuntu
 
+
 - name: "reboot server"
   become: yes
   reboot:
 
-- name: "initialize pm2"
+- name: "Start backend with pm2"
   become: yes
-  shell: pm2 ls
-  args:
-    chdir: /home/ubuntu/backend
-
-- name: "npm fix or idk"
   shell: |
-    npm i --save-dev @types/node
+    export TYPEORM_HOST="{{ lookup('env', 'TYPEORM_HOST') }}"
+    export TYPEORM_ENTITIES="{{ lookup('env', 'TYPEORM_ENTITIES') }}"
+    export TYPEORM_USERNAME="{{ lookup('env', 'TYPEORM_USERNAME') }}"
+    export TYPEORM_PASSWORD="{{ lookup('env', 'TYPEORM_PASSWORD') }}"
+    export TYPEORM_DATABASE="{{ lookup('env', 'TYPEORM_DATABASE') }}"
+    cd /home/ubuntu/ubuntu
+    pm2 start main.js --name ubuntu
 
-- name: "run migrations again"
-  shell: |
-    cd /home/ubuntu/backend
-    npm run migrations
-    
 - name: Executing node
   become: true
   shell: |
