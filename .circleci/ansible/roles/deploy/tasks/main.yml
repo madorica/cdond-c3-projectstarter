@@ -51,8 +51,7 @@
     src: ~/project/backend/package.json
     dest: /home/ubuntu/
     owner: ubuntu
-
-
+    
 - name: "reboot server"
   become: yes
   reboot:
@@ -65,7 +64,7 @@
     export TYPEORM_USERNAME="{{ lookup('env', 'TYPEORM_USERNAME') }}"
     export TYPEORM_PASSWORD="{{ lookup('env', 'TYPEORM_PASSWORD') }}"
     export TYPEORM_DATABASE="{{ lookup('env', 'TYPEORM_DATABASE') }}"
-    cd /home/ubuntu/ubuntu
+    cd /home/ubuntu/backend/src
     pm2 start main.js --name ubuntu
 
 - name: Executing node
