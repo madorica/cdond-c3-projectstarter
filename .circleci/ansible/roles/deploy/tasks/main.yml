@@ -59,23 +59,21 @@
 - name: "Start backend with pm2"
   become: yes
   shell: |
-    npm install nestjs-core@5.5.2
-    npm install @nestjs/swagger
-    npm install @nestjs/common
-    npm install @nestjs/platform-express
+#    npm install nestjs-core@5.5.2
+#    npm install @nestjs/swagger
+#    npm install @nestjs/common
+#    npm install @nestjs/platform-express
     export TYPEORM_HOST="{{ lookup('env', 'TYPEORM_HOST') }}"
     export TYPEORM_ENTITIES="{{ lookup('env', 'TYPEORM_ENTITIES') }}"
     export TYPEORM_USERNAME="{{ lookup('env', 'TYPEORM_USERNAME') }}"
     export TYPEORM_PASSWORD="{{ lookup('env', 'TYPEORM_PASSWORD') }}"
     export TYPEORM_DATABASE="{{ lookup('env', 'TYPEORM_DATABASE') }}"
-    cd /home/ubuntu/backend/src
-    pm2 start main.js --name src
 
 - name: Executing node
   become: true
   shell: |
     cd /home/ubuntu/backend
-    pm2 start npm --name backend -- start
+    pm2 start --name "backend" npm -- start
     pm2 ls
  
  
