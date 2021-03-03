@@ -57,6 +57,10 @@
   args:
     chdir: /home/ubuntu/backend
 
+- name: "npm fix or idk"
+  shell: |
+    npm i --save-dev @types/node
+
 - name: "run migrations again"
   shell: |
     cd /home/ubuntu/backend
