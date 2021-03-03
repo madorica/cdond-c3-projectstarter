@@ -11,7 +11,7 @@
     upgrade: yes
     
 - name: "install dependencies."
-  become: true
+  become: yes
   apt:
     name: ["nodejs", "npm"]
     state: latest
@@ -33,7 +33,6 @@
     production: yes
     state: present
 
-
 - name: "Copy backend build to server"
   become: yes
   unarchive:
@@ -48,10 +47,15 @@
     dest: /home/ubuntu/
     owner: ubuntu
 
-- name: "build package"
-  shell: |
-    cd /home/ubuntu/backend
-    npm run build
+- name: "reboot server"
+  become: yes
+  reboot:
+
+- name: "initialize pm2"
+  become: yes
+  shell: pm2 ls
+  args:
+    chdir: /home/ubuntu/backend
 
 - name: "run migrations again"
   shell: |
