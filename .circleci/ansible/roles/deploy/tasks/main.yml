@@ -1,4 +1,4 @@
-  
+
 ---
 - name: "update apt packages."
   become: yes
@@ -13,7 +13,7 @@
 - name: "install dependencies."
   become: yes
   apt:
-    name: ["nodejs", "npm"]
+    name: ["node.js", "npm"]
     state: latest
     update_cache: yes
     
@@ -25,11 +25,6 @@
     production: yes
     state: present
     
-- name: "Install NPM dependencies"
-  shell:
-    cmd: npm install --production
-    chdir: /home/ubuntu/    
-
 - name: "install typescript"
   become: yes
   npm:
@@ -37,7 +32,13 @@
     global: yes
     production: yes
     state: present
-
+    
+- name: " update dependancies"
+  become: true
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    apt-get install -y nodejs  
+    
 - name: "Copy backend build to server"
   become: yes
   unarchive:
@@ -52,11 +53,14 @@
     dest: /home/ubuntu/
     owner: ubuntu
     
-- name: "reboot server"
-  become: yes
-  reboot:
-
-- name: "Start backend with pm2"
+- name: Build
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm install
+    npm run build    
+    
+- name: "export .env"
   become: yes
   shell: |
     export TYPEORM_HOST="{{ lookup('env', 'TYPEORM_HOST') }}"
@@ -64,12 +68,9 @@
     export TYPEORM_USERNAME="{{ lookup('env', 'TYPEORM_USERNAME') }}"
     export TYPEORM_PASSWORD="{{ lookup('env', 'TYPEORM_PASSWORD') }}"
     export TYPEORM_DATABASE="{{ lookup('env', 'TYPEORM_DATABASE') }}"
-
 - name: Executing node
   become: true
   shell: |
     cd /home/ubuntu/backend
     pm2 start --name "backend" npm -- start:prod
     pm2 ls
- 
- 
