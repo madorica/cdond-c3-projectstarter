@@ -24,8 +24,8 @@
       TYPEORM_ENTITIES: "{{ lookup('env','TYPEORM_ENTITIES') }}"
     ansible_host_key_checking: false
     
-    - name: "install python for Ansible."
-      raw: sudo apt -y install python3
+- name: "install python for Ansible."
+   raw: sudo apt -y install python3
 
 
   roles:
