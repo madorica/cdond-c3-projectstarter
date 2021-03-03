@@ -59,6 +59,10 @@
 - name: "Start backend with pm2"
   become: yes
   shell: |
+    npm install nestjs-core@5.5.2
+    npm install @nestjs/swagger
+    npm install @nestjs/common
+    npm install @nestjs/platform-express
     export TYPEORM_HOST="{{ lookup('env', 'TYPEORM_HOST') }}"
     export TYPEORM_ENTITIES="{{ lookup('env', 'TYPEORM_ENTITIES') }}"
     export TYPEORM_USERNAME="{{ lookup('env', 'TYPEORM_USERNAME') }}"
