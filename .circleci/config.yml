@@ -260,7 +260,7 @@ jobs:
           command: |
             cd backend
             npm run migrations > migration_result.txt
-            migration_result.txt
+            cat migration_result.txt
       - run:
           name: save migrations
           command: |
