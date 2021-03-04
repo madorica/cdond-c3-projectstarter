@@ -60,7 +60,6 @@
     cd /home/ubuntu/backend
     npm install
     npm fund
-    npm audit fix --force
     npm run build    
     
 - name: "export .env"
