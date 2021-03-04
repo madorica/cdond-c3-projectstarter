@@ -79,4 +79,5 @@
     pm2 ls
     
 - name: "Reboot system" 
+  become: true
   reboot:    
