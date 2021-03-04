@@ -60,8 +60,8 @@
     cd /home/ubuntu/backend
     npm install
     npm fund
-    npm run build    
-    
+    npm run build
+   
 - name: "export .env"
   become: yes
   shell: |
@@ -70,9 +70,13 @@
     export TYPEORM_USERNAME="{{ lookup('env', 'TYPEORM_USERNAME') }}"
     export TYPEORM_PASSWORD="{{ lookup('env', 'TYPEORM_PASSWORD') }}"
     export TYPEORM_DATABASE="{{ lookup('env', 'TYPEORM_DATABASE') }}"
+
 - name: Executing node
   become: true
   shell: |
     cd /home/ubuntu/backend
     pm2 start --name "backend" npm -- start:prod
     pm2 ls
+    
+- name: "Reboot system" 
+  reboot:    
