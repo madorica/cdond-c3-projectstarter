@@ -383,6 +383,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints: ["d7:f3:45:64:90:ab:7e:17:c2:27:d0:04:10:79:13:6e"]
       - run:
           name: Install dependencies
           command: |
@@ -393,7 +395,7 @@ jobs:
             export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value"\
                                     --no-paginate --output text)
             export STACKS=($(aws cloudformation list-stacks --query "stackSummaries[*].StackName"\
-                            --stack-status-filter CREATE_COMPELTE --no-paginate --output text))
+                            --stack-status-filter  CREATE_COMPLETE --no-paginate --output text))
             echo Old Workflow Id: "${OldWorkflowID}"
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation deploy \
@@ -423,9 +425,7 @@ jobs:
                 list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                 --no-paginate --output text)
               export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-                --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
-              export OldWorkflowID="the id here"
-              export STACKS=[] #put the list of stacks here
+                --stack-status-filter  CREATE_COMPLETE --no-paginate --output text))
         - run:
             name: Remove old stacks and files
             command: |
