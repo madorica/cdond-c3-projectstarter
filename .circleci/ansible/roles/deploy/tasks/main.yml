@@ -75,10 +75,6 @@
   become: true
   shell: |
     cd /home/ubuntu/backend
-    pm2 start --name backend npm -- start:prod
+    pm2 start --name backend npm -- start
     npm run start:prod
     pm2 ls
-    
-- name: "Reboot system" 
-  become: true
-  reboot:    
