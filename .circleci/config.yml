@@ -396,7 +396,7 @@ jobs:
           command: |
             aws cloudformation update-stack \
             --use-previous-template \
-            --stack-name cloudfront-stack \
+            --stack-name udapeople \
             --parameters ParameterKey=WorkflowID,ParameterValue=$CIRCLE_WORKFLOW_ID,UsePreviousValue=false
       - destroy-environment
       - revert-migrations
