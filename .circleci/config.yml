@@ -423,7 +423,7 @@ jobs:
                 --stack-status-filter  CREATE_COMPLETE --no-paginate --output text))
               echo Old Workflow Id: "${OldWorkflowID}"
               echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
-              if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+              if [ -n "${OldWorkflowID}" ]
               then
                 echo "s3://udapeople-${OldWorkflowID}"
                 aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
