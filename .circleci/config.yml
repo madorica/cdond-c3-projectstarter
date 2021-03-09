@@ -414,7 +414,7 @@ jobs:
             fingerprints: ["80:09:79:8b:a0:5e:b4:ea:f0:73:ec:ee:23:03:2f:de"]
         - checkout
         - run:
-            name: Get old stack workflow id
+            name: Get old stack workflow id & Remove old stacks and files
             command: |
               export OldWorkflowID=$(aws cloudformation \
                 list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
@@ -423,9 +423,6 @@ jobs:
                 --stack-status-filter  CREATE_COMPLETE --no-paginate --output text))
               echo Old Workflow Id: "${OldWorkflowID}"
               echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
-        - run:
-            name: Remove old stacks and files
-            command: |
               if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
               then
                 echo "s3://udapeople-${OldWorkflowID}"
