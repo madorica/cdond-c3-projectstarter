@@ -232,6 +232,8 @@ jobs:
             cd .circleci/ansible
             echo $PWD
             ansible-playbook -i inventory.txt configure-server.yml
+            cd .circleci/ansible/roles/configure-prometheus-node-exporter/tasks/main.yml
+            ansible-playbook -i inventory.txt main.yml
       - revert-migrations
       - destroy-environment # Rollback on failure      
 
@@ -412,17 +414,6 @@ jobs:
                 --template-body file://./.circleci/files/cloudfront.yml \
                 --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7} \
                 --tags 'Key=project,Value=udapeople-prod-update'
-                #            if [ -n "${OLD_WORK_FLOW_ID}" ]
-#            then
-#            fi
-#            else              
-#              echo "Create CloudFront stack"
-#              aws cloudformation create-stack  \
-#                --stack-name udapeople-cloudfront-${CIRCLE_WORKFLOW_ID:0:7} \
-#                --template-body file://./.circleci/files/cloudfront.yml \
-#                --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7} \
-#                --tags 'Key=project,Value=udapeople-prod-create'            
-#            fi
 
       - destroy-environment
       - revert-migrations
