@@ -405,22 +405,24 @@ jobs:
             
             echo OldWorkflowID: "$OldWorkflowID"
             echo STACKS: "$STACKS" 
-            if [ -n "${OLD_WORK_FLOW_ID}" ]
-            then
+
               echo "Update CloudFront stack"
               aws cloudformation update-stack  \
                 --stack-name udapeople-cloudfront-${CIRCLE_WORKFLOW_ID:0:7} \
                 --template-body file://./.circleci/files/cloudfront.yml \
                 --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7} \
                 --tags 'Key=project,Value=udapeople-prod-update'
-            else              
-              echo "Create CloudFront stack"
-              aws cloudformation create-stack  \
-                --stack-name udapeople-cloudfront-${CIRCLE_WORKFLOW_ID:0:7} \
-                --template-body file://./.circleci/files/cloudfront.yml \
-                --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7} \
-                --tags 'Key=project,Value=udapeople-prod-create'            
-            fi
+                #            if [ -n "${OLD_WORK_FLOW_ID}" ]
+#            then
+#            fi
+#            else              
+#              echo "Create CloudFront stack"
+#              aws cloudformation create-stack  \
+#                --stack-name udapeople-cloudfront-${CIRCLE_WORKFLOW_ID:0:7} \
+#                --template-body file://./.circleci/files/cloudfront.yml \
+#                --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7} \
+#                --tags 'Key=project,Value=udapeople-prod-create'            
+#            fi
 
       - destroy-environment
       - revert-migrations
