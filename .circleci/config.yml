@@ -232,8 +232,6 @@ jobs:
             cd .circleci/ansible
             echo $PWD
             ansible-playbook -i inventory.txt configure-server.yml
-            cd ~/project/.circleci/ansible/roles/configure-prometheus-node-exporter/tasks/
-            ansible-playbook -i inventory.txt main.yml
       - revert-migrations
       - destroy-environment # Rollback on failure      
 
