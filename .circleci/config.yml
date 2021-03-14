@@ -133,8 +133,9 @@ jobs:
       - run:
           name: Build backend
           command: |
+            npm update
             npm i
-            npm audit fix --audit-level=critical 
+            npm audit fix --audit-level=critical --force
 
   deploy-infrastructure:
     docker:
