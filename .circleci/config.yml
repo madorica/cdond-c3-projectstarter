@@ -133,14 +133,8 @@ jobs:
       - run:
           name: Build backend
           command: |
-            cd backend
-            sudo npm install npm@latest -g
-            sudo npm i --save-dev standard-version
-            sudo npm i semver
-            sudo npm audit
-            sudo npm audit fix --force
-            sudo npm audit
-            sudo npm fund
+            npm i
+            npm audit fix --audit-level=critical 
 
   deploy-infrastructure:
     docker:
