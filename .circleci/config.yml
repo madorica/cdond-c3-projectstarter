@@ -313,7 +313,6 @@ jobs:
             apk add --update ansible
             apk add --update tar gzip curl nodejs npm
             pip install awscli
-            npm audit fix --audit-level=critical --force
       - run:
           name: install openssh
           command: |
