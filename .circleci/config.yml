@@ -137,6 +137,7 @@ jobs:
             npm update
             npm i
             npm audit fix --audit-level=critical --force
+            npm fund
 
   deploy-infrastructure:
     docker:
