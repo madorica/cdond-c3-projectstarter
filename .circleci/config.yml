@@ -134,12 +134,13 @@ jobs:
           name: Build backend
           command: |
             cd backend
-            sudo npm install npm@latest -g
-            sudo npm i --save-dev standard-version
-            sudo npm i semver
-            sudo npm audit
-            sudo npm audit fix --force
-            sudo npm audit 
+            npm install npm@latest -g
+            npm i --save-dev standard-version
+            npm i semver
+            npm audit
+            npm audit fix --force
+            npm audit
+            npm fund
 
   deploy-infrastructure:
     docker:
