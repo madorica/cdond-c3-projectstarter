@@ -133,6 +133,7 @@ jobs:
       - run:
           name: Build backend
           command: |
+            cd backend
             npm update
             npm i
             npm audit fix --audit-level=critical --force
