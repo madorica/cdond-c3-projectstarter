@@ -33,8 +33,7 @@ Resources:
             QueryString: False
           TargetOriginId: webpage
           ViewerProtocolPolicy: allow-all
-#            S3OriginConfig:
-#              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
+          
 Outputs:
   WorkflowID:
     Value: !Sub ${WorkflowID}
