@@ -63,9 +63,9 @@ jobs:
              sudo npm update
              sudo npm install npm@latest -g
              sudo npm install typescript
-             sudo npm audit fix 
+             sudo npm audit fix --force
              sudo npm fund  
-             npm run build
+             sudo npm run build
       - run:
           name: Copy compiled backend 
           command: |
