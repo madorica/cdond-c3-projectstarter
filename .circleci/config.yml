@@ -64,8 +64,8 @@ jobs:
              #sudo npm install npm@latest -g
              #sudo npm i --save-dev standard-version
              sudo npm install typescript
-             #sudo npm audit fix --force
-             #sudo npm fund  
+             sudo npm audit fix --force
+             sudo npm fund  
              sudo npm run build
 
       - run:
