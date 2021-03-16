@@ -43,8 +43,6 @@ jobs:
             sudo npm update
             sudo npm install npm@latest -g
             sudo npm install webpack
-            sudo npm audit fix --audit-level=critical --force
-            sudo npm fund  
             sudo npm run build
 
       - save_cache:
@@ -65,6 +63,8 @@ jobs:
              sudo npm update
              sudo npm install npm@latest -g
              sudo npm install typescript
+             sudo npm audit fix --audit-level=critical --force
+             sudo npm fund  
              sudo npm run build
       - run:
           name: Copy compiled backend 
