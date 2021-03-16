@@ -268,7 +268,7 @@ jobs:
           command: |
             cd backend
             sudo npm install
-            sudo npm install npm@latest -g
+            # sudo npm install npm@latest -g
             sudo npm audit fix --force
             sudo npm fund
             sudo npm run build
