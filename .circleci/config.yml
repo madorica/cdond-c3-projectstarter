@@ -40,9 +40,10 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm update
-            npm install webpack 
-            npm run build
+            sudo npm update
+            sudo npm install npm@latest -g
+            sudo npm install webpack 
+            sudo npm run build
 
       - save_cache:
           paths: [frontend/node_modules]
@@ -59,8 +60,10 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             npm install typescript
-             npm run build
+             sudo npm update
+             sudo npm install npm@latest -g
+             sudo npm install typescript
+             sudo npm run build
       - run:
           name: Copy compiled backend 
           command: |
@@ -88,8 +91,9 @@ jobs:
             name: Front-end test
             command: |
               cd backend
-              npm i
-              npm run test
+              sudo npm install npm@latest -g
+              sudo npm i
+              sudo npm run test
         - save_cache:
             paths: [frontend/node_modules]
             key: frontend-test
@@ -105,8 +109,9 @@ jobs:
           name: back-end test
           command: |
             cd backend
-            npm install jest
-            npm run test
+            sudo npm install npm@latest -g
+            sudo npm install jest
+            sudo npm run test
 
             
   scan-frontend:
@@ -120,8 +125,8 @@ jobs:
           name: scan front-end
           command: |
             cd frontend
-            npm update
-            npm audit fix --audit-level=critical --force
+            sudo npm update
+            sudo npm audit fix --audit-level=critical --force
 
   scan-backend:
     docker:
@@ -134,10 +139,10 @@ jobs:
           name: Build backend
           command: |
             cd backend
-            npm update
-            npm i
-            npm audit fix --audit-level=critical --force
-            npm fund
+            sudo npm update
+            sudo npm i
+            sudo npm audit fix --audit-level=critical --force
+            sudo npm fund
 
   deploy-infrastructure:
     docker:
