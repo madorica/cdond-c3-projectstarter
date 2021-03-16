@@ -42,7 +42,9 @@ jobs:
             cd frontend
             sudo npm update
             sudo npm install npm@latest -g
-            sudo npm install webpack 
+            sudo npm install webpack
+            sudo npm audit fix --audit-level=critical --force
+            sudo npm fund  
             sudo npm run build
 
       - save_cache:
