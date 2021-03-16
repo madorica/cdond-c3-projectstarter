@@ -59,15 +59,11 @@ jobs:
       - run:
           name: Back-end build
           command: |
-             cd backend
-             sudo npm update
-             sudo npm install
-             sudo npm install npm@latest -g 
-             #sudo npm install typescript
-             #sudo npm i --save-dev standard-version
-             sudo npm audit fix --force
-             sudo npm fund
-             sudo npm run build
+            cd backend
+            sudo npm install npm@latest -g
+            # sudo npm i --save-dev standard-version
+            # sudo npm i semver
+            sudo npm run build
 
       - run:
           name: Copy compiled backend 
