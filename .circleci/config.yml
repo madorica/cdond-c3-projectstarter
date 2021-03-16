@@ -62,6 +62,7 @@ jobs:
              cd backend
              sudo npm update
              #sudo npm install typescript
+             sudo npm install
              #sudo npm i --save-dev standard-version
              #sudo npm install npm@latest -g 
              sudo npm audit fix --force
