@@ -272,7 +272,7 @@ jobs:
             # sudo npm audit fix --force
             # sudo npm fund
             npm run build
-            npm run migrations > migration_result.txt
+            sudo npm run migrations > migration_result.txt
             cat migration_result.txt
       - run:
           name: save migrations
